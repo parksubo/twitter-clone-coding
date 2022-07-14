@@ -1,0 +1,33 @@
+[33mcommit f5aad13ab3b082dc2a462a286a8ef68184e1c435[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: unknown <subo0521@hanmail.net>
+Date:   Thu Jul 14 13:04:19 2022 +0900
+
+    feat: Login Form 추가 / (Email/Password Login Form Google Login Form) (Auth.js)
+
+[33mcommit 6818a4a99c64fe437733fc07b7e67537d2182998[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: unknown <subo0521@hanmail.net>
+Date:   Tue Jul 12 21:26:16 2022 +0900
+
+    feat: firebase 연동
+    feat: jsconfig.json 추가 (src디렉토리를 baseURL로 설정)
+
+[33mcommit e94296579ce3aef61d5b15868526a311a496c794[m
+Author: unknown <subo0521@hanmail.net>
+Date:   Tue Jul 12 14:33:03 2022 +0900
+
+    feat: components, routes 디렉토리 추가
+    feat: Auth.js, EditProfile.js, Home.js, Profile.js 추가
+    feat: Router.js 추가
+
+[33mcommit 35b4cbd24cd4089954784ee997dd809b7ba19666[m
+Author: unknown <subo0521@hanmail.net>
+Date:   Tue Jul 12 13:17:53 2022 +0900
+
+    feat: key 및 URL 관리를 위한 .env 추가
+    refactor: firebase.js .env의 값 참조하도록 수정
+
+[33mcommit f5ddef704295b472b91ac431d41ae6792fb3a62e[m
+Author: unknown <subo0521@hanmail.net>
+Date:   Fri Jul 8 15:34:19 2022 +0900
+
+    First Commit
