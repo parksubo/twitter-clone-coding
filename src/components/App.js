@@ -4,8 +4,8 @@ import { authService } from "myFirebase";
 
 function App() {
   
-  //const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
+  //const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <>
     <AppRouter isLoggedIn={isLoggedIn} />
