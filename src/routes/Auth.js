@@ -9,7 +9,8 @@ import React, {useEffect, useState} from "react";
 const Auth = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [newAccount, setNewAccount] = useState(true);
+    const [newAccount, setNewAccount] = useState(false);
+    const [error, setError] = useState("");
 
     // Input Change 감지
     const onChange = (event) => {
@@ -51,10 +52,14 @@ const Auth = () => {
             console.log(data);
         }
         catch(error) {
-            console.log(error);
+            // 에러탐지시 메시지 설정
+            setError(error.message);
         }
         
     };
+
+    // newAccount의 이전 값을 가져와서 반대되는 값을 리턴
+    const toggleAccount = () => setNewAccount((prev) => !prev);
 
     return (
         <div>
@@ -77,7 +82,13 @@ const Auth = () => {
                     type="submit"
                     value={newAccount ? "Create Account" : "Log In"}
                 />
+                {error ? alert(error) : ""}
             </form>
+            <span 
+                onClick={toggleAccount}
+                style={{ color: "#3F51B5" }}>
+                {newAccount ? "Do you want to Log In?" : "Do you want to Create Account?"}
+            </span>
             <div>
                 <button>
                     Login with Google
