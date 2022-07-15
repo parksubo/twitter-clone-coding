@@ -1,6 +1,8 @@
 import { createUserWithEmailAndPassword,
          signInWithEmailAndPassword,
-         getAuth 
+         getAuth, 
+         GoogleAuthProvider,
+         signInWithPopup
        } from "firebase/auth";
 import { authService } from "myFirebase";
 import React, {useEffect, useState} from "react";
@@ -61,6 +63,23 @@ const Auth = () => {
     // newAccount의 이전 값을 가져와서 반대되는 값을 리턴
     const toggleAccount = () => setNewAccount((prev) => !prev);
 
+    // 소셜 로그인을 위한 onClick
+    const onSocialClick = async (event) => {
+        const {
+            target: { name },
+        } = event;
+
+        let provider;
+        const auth = getAuth();
+
+        if(name === "google") {
+            provider = new GoogleAuthProvider();
+        }
+
+        const data = await signInWithPopup(auth, provider);
+        console.log(data);
+    }
+
     return (
         <div>
             <form onSubmit={onSubmit}>
@@ -90,7 +109,7 @@ const Auth = () => {
                 {newAccount ? "Do you want to Log In?" : "Do you want to Create Account?"}
             </span>
             <div>
-                <button>
+                <button onClick={onSocialClick} name="google">
                     Login with Google
                 </button>
             </div>
