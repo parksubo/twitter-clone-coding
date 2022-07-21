@@ -1,10 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { dbService } from "myFirebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 
 // for Home import
 const Home = () => {
     const [tweet, setTweet] = useState("");
+    const [tweets, setTweets] = useState([]);
+
+    const getTweets = async () => {
+        const dbTweets = await getDocs(collection(dbService, "tweets"));
+        dbTweets.forEach((doc) => {
+            const tweetObject = {
+                ...doc.data(),
+                id: doc.id,
+            };
+            setTweets((prev) => [tweetObject, ...prev]);
+        });
+    }
+
+    useEffect(() => {
+        getTweets();
+    }, []);
     
     const onSubmit = async (event) => {
         // 아무것도 입력하지 않는 행위 방지
@@ -40,8 +56,15 @@ const Home = () => {
                 value="Tweet"
             />
         </form>
+        <div>
+            {tweets.map((tweet) => (
+                <div key={tweet.id}>
+                    <h4>{tweet.tweet}</h4>
+                </div>
+            ))}
+        </div>
     </div> 
     );
-}    
+};    
 
 export default Home;
