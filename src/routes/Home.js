@@ -1,25 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { dbService } from "myFirebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, orderBy, query, onSnapshot } from "firebase/firestore";
 
 // for Home import
-const Home = () => {
+const Home = ({ userObj }) => {
     const [tweet, setTweet] = useState("");
     const [tweets, setTweets] = useState([]);
 
     const getTweets = async () => {
         const dbTweets = await getDocs(collection(dbService, "tweets"));
-        dbTweets.forEach((doc) => {
+        dbTweets.forEach((document) => {
             const tweetObject = {
-                ...doc.data(),
-                id: doc.id,
+                ...document.data(),
+                id: document.id,
             };
             setTweets((prev) => [tweetObject, ...prev]);
         });
     }
 
     useEffect(() => {
-        getTweets();
+        //getTweets();
+        const q = query(collection(dbService, "tweets"), orderBy("createdAt", "desc"));
+        // arr를 만들어준다음 setTweets 하는 방법
+        onSnapshot(q, (snapshot) => {
+            const tweetArr = snapshot.docs.map((document) => ({
+                id: document.id,
+                ...document.data(),
+            }));
+            setTweets(tweetArr);
+        })
     }, []);
     
     const onSubmit = async (event) => {
@@ -27,8 +36,9 @@ const Home = () => {
         event.preventDefault();
         // tweets collction에 tweet내용과 작성시간을 담은 Doc을 add
         await addDoc(collection(dbService, "tweets"), {
-            tweet,
+            text: tweet,
             createdAt: Date.now(),
+            creatorId: userObj.uid,
         });
         // add한 이후 tweet을 빈 문자열로 초기화
         setTweet("");
@@ -59,7 +69,7 @@ const Home = () => {
         <div>
             {tweets.map((tweet) => (
                 <div key={tweet.id}>
-                    <h4>{tweet.tweet}</h4>
+                    <h4>{tweet.text}</h4>
                 </div>
             ))}
         </div>
