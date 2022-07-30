@@ -11,6 +11,7 @@ const Home = ({ userObj }) => {
     const getTweets = async () => {
         const dbTweets = await getDocs(collection(dbService, "tweets"));
         dbTweets.forEach((document) => {
+            // tweet의 구조
             const tweetObject = {
                 ...document.data(),
                 id: document.id,
