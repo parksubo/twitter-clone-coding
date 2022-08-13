@@ -7,6 +7,7 @@ import Tweet from "components/Tweet";
 const Home = ({ userObj }) => {
     const [tweet, setTweet] = useState("");
     const [tweets, setTweets] = useState([]);
+    const [attachment, setAttachment] = useState();
 
     const getTweets = async () => {
         const dbTweets = await getDocs(collection(dbService, "tweets"));
@@ -20,19 +21,6 @@ const Home = ({ userObj }) => {
         });
     }
 
-    useEffect(() => {
-        //getTweets();
-        const q = query(collection(dbService, "tweets"), orderBy("createdAt", "desc"));
-        // arr를 만들어준다음 setTweets 하는 방법
-        onSnapshot(q, (snapshot) => {
-            const tweetArr = snapshot.docs.map((document) => ({
-                id: document.id,
-                ...document.data(),
-            }));
-            setTweets(tweetArr);
-        })
-    }, []);
-    
     const onSubmit = async (event) => {
         // 아무것도 입력하지 않는 행위 방지
         event.preventDefault();
@@ -53,6 +41,39 @@ const Home = ({ userObj }) => {
         setTweet(value);
     };
 
+    const onFileChange = (event) => {
+        const {
+            target:{ files },
+        } = event;
+        const theFile = files[0];
+        const reader = new FileReader();
+
+        // 파일 로딩이 끝남을 받는 event listener
+        reader.onloadend = (finishedEvent) => {
+            const {
+                currentTarget: { result },
+            } = finishedEvent;
+            setAttachment(result);
+        } 
+        reader.readAsDataURL(theFile);
+    };
+
+    const onClearAttachment = () => setAttachment(null);
+
+    useEffect(() => {
+        //getTweets();
+        const q = query(collection(dbService, "tweets"), orderBy("createdAt", "desc"));
+        // arr를 만들어준다음 setTweets 하는 방법
+        onSnapshot(q, (snapshot) => {
+            // snapshot은 listener라고 생각하면 됨
+            const tweetArr = snapshot.docs.map((document) => ({
+                id: document.id,
+                ...document.data(),
+            }));
+            setTweets(tweetArr);
+        })
+    }, []);
+
     return (
         <div>
         <form onSubmit={onSubmit}>
@@ -67,6 +88,19 @@ const Home = ({ userObj }) => {
                 type="submit"
                 value="Tweet"
             />
+            <input
+                onChange={onFileChange}
+                type="file"
+                accept="image/*"
+            />
+            {
+                attachment && (
+                <div>
+                    <img src={attachment} width="100px" height="100px" />
+                    <button onClick={onClearAttachment}>Clear</button>
+                </div>
+                )
+            }
         </form>
         <div>
             {tweets.map((tweet) => (
