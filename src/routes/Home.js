@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { dbService } from "myFirebase";
+import { dbService, storageService } from "myFirebase";
 import { addDoc, collection, getDocs, orderBy, query, onSnapshot } from "firebase/firestore";
+import {ref, uploadString} from "@firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 import Tweet from "components/Tweet";
 
 // for Home import
@@ -24,6 +26,10 @@ const Home = ({ userObj }) => {
     const onSubmit = async (event) => {
         // 아무것도 입력하지 않는 행위 방지
         event.preventDefault();
+        const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`)
+        const response = await uploadString(fileRef, attachment, "data_url");
+        console.log(response);
+        /*
         // tweets collction에 tweet내용과 작성시간을 담은 Doc을 add
         await addDoc(collection(dbService, "tweets"), {
             text: tweet,
@@ -32,6 +38,7 @@ const Home = ({ userObj }) => {
         });
         // add한 이후 tweet을 빈 문자열로 초기화
         setTweet("");
+        */
     };
 
     const onChange = (event) => {
