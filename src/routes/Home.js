@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { dbService, storageService } from "myFirebase";
 import { addDoc, collection, getDocs, orderBy, query, onSnapshot } from "firebase/firestore";
-import {ref, uploadString} from "@firebase/storage";
+import {getDownloadURL, ref, uploadString} from "@firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import Tweet from "components/Tweet";
 
@@ -26,19 +26,30 @@ const Home = ({ userObj }) => {
     const onSubmit = async (event) => {
         // 아무것도 입력하지 않는 행위 방지
         event.preventDefault();
-        const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`)
-        const response = await uploadString(fileRef, attachment, "data_url");
-        console.log(response);
-        /*
+        let attachmentURL ="";
+
+        if(attachment !== "")  {
+            // 파일 경로 참조 만들기
+            const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+            // 스토리지 참조경로로 파일 업로드하기
+            const response = await uploadString(fileRef, attachment, "data_url");
+            // 스토리지 참조 경로에 있는 파일의 URL을 다운로드해서 변수에 넣고 업데이트
+            attachmentURL = await getDownloadURL(fileRef);
+        }
+             
         // tweets collction에 tweet내용과 작성시간을 담은 Doc을 add
-        await addDoc(collection(dbService, "tweets"), {
+        const tweetObject = {
             text: tweet,
             createdAt: Date.now(),
             creatorId: userObj.uid,
-        });
+            attachmentURL,
+        };
+
+        await addDoc(collection(dbService, "tweets"), tweetObject);
         // add한 이후 tweet을 빈 문자열로 초기화
         setTweet("");
-        */
+        // 파일 미리보기 img 비우기
+        setAttachment("");
     };
 
     const onChange = (event) => {
