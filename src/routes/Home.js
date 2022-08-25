@@ -9,7 +9,7 @@ import Tweet from "components/Tweet";
 const Home = ({ userObj }) => {
     const [tweet, setTweet] = useState("");
     const [tweets, setTweets] = useState([]);
-    const [attachment, setAttachment] = useState();
+    const [attachment, setAttachment] = useState("");
 
     const getTweets = async () => {
         const dbTweets = await getDocs(collection(dbService, "tweets"));
