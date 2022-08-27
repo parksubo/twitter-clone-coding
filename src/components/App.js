@@ -10,12 +10,19 @@ function App() {
   // user 정보 state
   const [userObj, setUserObj] = useState(null);
 
+  // userObj 새로고침
+  const refreshUser = () => {
+    const user = authService.currentUser;
+    setUserObj({...user});
+  }
+
   // user의 변화를 듣고 listen
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if(user) {
         setIsLoggedIn(true);
-        setUserObj(user);
+        setUserObj({...user});
+        //console.log({...user});
       }
       else {
         setIsLoggedIn(false);
@@ -27,7 +34,11 @@ function App() {
 
   return (
     <>
-    {init ? <AppRouter isLoggedIn={isLoggedIn} userObj={userObj} /> : "Initializing..."}
+    {init ? <AppRouter 
+              isLoggedIn={isLoggedIn}
+              userObj={userObj}
+              refreshUser={refreshUser}  
+            /> : "Initializing..."}
     <footer>&copy; {new Date().getFullYear()} PONZ</footer>
     </>
   );
