@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { dbService, storageService } from "myFirebase";
 import { addDoc, collection, getDocs, orderBy, query, onSnapshot } from "firebase/firestore";
-import {getDownloadURL, ref, uploadString} from "@firebase/storage";
+//import {getDownloadURL, ref, uploadString} from "@firebase/storage";
 import Tweet from "components/Tweet";
 import TweetFactory from "components/TweetFactory";
 
@@ -10,7 +10,6 @@ const Home = ({ userObj }) => {
     
     const [tweets, setTweets] = useState([]);
     
-
     /*
     const getTweets = async () => {
         const dbTweets = await getDocs(collection(dbService, "tweets"));
@@ -24,8 +23,6 @@ const Home = ({ userObj }) => {
         });
     }
     */
-
-
 
     useEffect(() => {
         //getTweets();
